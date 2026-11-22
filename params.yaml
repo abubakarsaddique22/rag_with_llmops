@@ -1,0 +1,53 @@
+# application parameters
+rag_app:
+  prompt_label: production
+  llm_provider: groq                 # groq | ollama
+  llm: openai/gpt-oss-20b            # Groq ka model ID (ollama ho to e.g. qwen3:1.7b)
+  embedding_model: nomic-embed-text:latest
+  embedding_dimensions: 768          # nomic-embed-text ka asli size (3072 ghalat tha)
+  chunk_size: 270
+  chunk_overlap: 30
+  tokenizer_encoding: o200k_base
+  collection_name: rag_demo_nomic    # naya naam: purana rag_demo bge (384-dim) tha, mix nahi hona chahiye
+  search_type: similarity
+  k: 3
+  contextual_compression: false      # 1.7b model ke sath slow/noisy hai; true karke try kar sakte hain
+  compression_llm: qwen3:1.7b
+
+# golden dataset
+golden_dataset:
+  dataset_model: gpt-oss:20b-cloud
+  max_goldens_per_context: 3
+  golden_dataset_filename: golden_dataset_final
+  filtration_config:
+    filtration_threshold: 0.6
+    max_quality_retries: 2
+    filtration_critic_model: gpt-oss:20b-cloud
+  evolution_config:
+    num_evolutions: 2
+    evolutions:
+      multicontext: 0.1
+      concretizing: 0.3
+      constrained: 0.4
+      comparative: 0.2
+  context_construction_config:
+    context_critic_model: gpt-oss:20b-cloud
+    max_contexts_per_document: 1
+    context_threshold: 0.7
+    max_context_retries: 2
+    context_chunk_size: 300
+    context_chunk_overlap: 30
+
+# evaluation dataset
+evaluation_dataset:
+  evaluation_dataset_filename: evaluation_dataset_final
+
+# evaluation
+evaluation:
+  judge_llm: gpt-oss:20b-cloud
+  async_config:
+    throttle_value: 3
+    max_concurrent: 2
+  display_config:
+    results_dir: evaluation_results
+    report_dir: evaluation_report
