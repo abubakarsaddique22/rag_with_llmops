@@ -22,7 +22,8 @@ def _build_llm():
             model=app_params.llm,
             temperature=0,
             reasoning_effort="low",   # gpt-oss ke liye: tez jawab
-            max_retries=5,            # free tier ke 429 par dobara koshish
+            max_retries=3,            # free tier ke 429 par dobara koshish
+            timeout=60,               # 60s me jawab na aaye to error (atakne se bachao)
         )
 
     from langchain_ollama import ChatOllama

@@ -25,6 +25,7 @@ def _invoke_with_retry(query: str, attempts: int = 5):
 
     for i in range(attempts):
         try:
+            print(f"[query] {query[:80]}...", flush=True)
             return graph.invoke({"query": query})
         except Exception as e:  # noqa: BLE001
             if i == attempts - 1:
